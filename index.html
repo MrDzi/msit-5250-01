@@ -39,20 +39,13 @@
 
   <script>
     const city = 'New York';
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const apiUrl = `https://www.metaweather.com/api/location/search/?query=${city}`;
+    const apiUrl = `https://wttr.in/${city}?format=%C+%t`;
 
     fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
-        const woeid = data[0].woeid;
-        return fetch(`https://www.metaweather.com/api/location/${woeid}/`);
-      })
-      .then(response => response.json())
+      .then(response => response.text())
       .then(data => {
         const weatherElement = document.getElementById('weather');
-        const weather = data.consolidated_weather[0];
-        weatherElement.textContent = `The weather in ${data.title} is ${weather.weather_state_name} with a temperature of ${Math.round(weather.the_temp)}°C.`;
+        weatherElement.textContent = `The weather in ${city} is: ${data}`;
       })
       .catch(error => {
         console.error('Error fetching weather data:', error);
